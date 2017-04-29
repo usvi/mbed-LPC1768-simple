@@ -7,6 +7,9 @@
 # cross-platform directory manipulation
 MAKEDIR = '$(SHELL)' -c "mkdir -p \"$(1)\""
 RM = '$(SHELL)' -c "rm -rf \"$(1)\""
+FLASH = '$(SHELL)' -c "../flash.sh \"$(1)\" \"$(2)\""
+
+MOUNTDIR := /media
 
 OBJDIR := BUILD
 # Move to the build directory
@@ -33,7 +36,7 @@ VPATH = ..
 ###############################################################################
 # Project settings
 
-PROJECT := mbed-os-example-blinky
+PROJECT := mbed-lpc1768-simple-leds
 
 
 # Project settings
@@ -41,6 +44,7 @@ PROJECT := mbed-os-example-blinky
 # Objects and Paths
 
 OBJECTS += ./main.o
+OBJECTS += ./delay.o
 OBJECTS += ./mbed/libs/mbed_wrap.o
 OBJECTS += ./mbed/LPC1768/startup_LPC17xx.o
 OBJECTS += ./mbed/LPC1768/system_LPC17xx.o
@@ -83,7 +87,7 @@ LD_SYS_LIBS :=-Wl,--start-group -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys -Wl,--en
 ###############################################################################
 # Rules
 
-.PHONY: all lst size
+.PHONY: all lst size flash
 
 
 all: $(PROJECT).bin $(PROJECT).hex size
@@ -126,6 +130,10 @@ $(PROJECT).bin: $(PROJECT).elf
 
 $(PROJECT).hex: $(PROJECT).elf
 	$(ELF2BIN) -O ihex $< $@
+
+flash: $(PROJECT).bin
+	+@$(call FLASH,$(MOUNTDIR),$<)
+
 
 
 # Rules

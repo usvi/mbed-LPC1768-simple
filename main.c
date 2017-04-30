@@ -1,6 +1,7 @@
 #include "LPC17xx.h"
 #include "delay.h"
 
+// Not accurate ms value, only indicative
 #define LED_DELAY_MS 100
 
 int main() {

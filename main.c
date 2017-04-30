@@ -1,9 +1,19 @@
 #include "LPC17xx.h"
 #include "delay.h"
 
+#define LED_DELAY_MS 100
+
 int main() {
 
-  SystemInit();  
+  // LED masks, we use these later
+  uint8_t led1_set_mask = 0;
+  uint8_t led2_set_mask = 0;
+  uint8_t led3_set_mask = 0;
+  uint8_t led4_set_mask = 0;
+
+  // Initialize and start system
+  SystemInit();
+
 
   // Pins to control the LEDs are in this order from PCB led end to right and up:
   // 7, 9, 10, 12
@@ -26,6 +36,7 @@ int main() {
   // Pin 37/P1[23] mode with bits 15:14 to zero
   LPC_PINCON->PINSEL3 &= ~((1 << 15) | (1 << 14));
 
+
   // Next we set DIO ping directions to output.
   // As all pins start with P1, they are controlled by LPC_GPIO1 register
 
@@ -38,13 +49,54 @@ int main() {
   // In datasheets pin 37/P1[23] direction is controlled with FIOxDIR2 bit 7
   LPC_GPIO1->FIODIR2 |= (1 << 7);
 
+
+  // Next we define which pin masks there are to be used. Calculating mask only
+  // once saves processor cycles.
+
+  // In datasheets pin 32/P1[18] on/off is controlled with FIOxSET2 bit 2
+  led1_set_mask = (1 << 2);
+  // In datasheets pin 34/P1[20] on/off is controlled with FIOxSET2 bit 4
+  led2_set_mask = (1 << 4);
+  // In datasheets pin 35/P1[21] on/off is controlled with FIOxSET2 bit 5
+  led3_set_mask = (1 << 5);
+  // In datasheets pin 37/P1[23] on/off is controlled with FIOxSET2 bit 7
+  led4_set_mask = (1 << 7);
+
+
+  // Lets make a loop which continuously bounces one lit LED from start
+  // to end and back
+
+  while(1)
+  {
+    // Pins are set high with FIOxSET2
+    // Activate first LED
+    LPC_GPIO1->FIOSET2 |= led1_set_mask;
+    DELAY_ms(LED_DELAY_MS);
+    // Pins are set low with FIOxSET2
+    // Deactivate first LED, activate second LED
+    LPC_GPIO1->FIOCLR2 |= led1_set_mask;
+    LPC_GPIO1->FIOSET2 |= led2_set_mask;
+    DELAY_ms(LED_DELAY_MS);
+    // Deactivate second LED, activate third LED
+    LPC_GPIO1->FIOCLR2 |= led2_set_mask;
+    LPC_GPIO1->FIOSET2 |= led3_set_mask;
+    DELAY_ms(LED_DELAY_MS);
+    // Deactivate third LED, activate fourth LED
+    LPC_GPIO1->FIOCLR2 |= led3_set_mask;
+    LPC_GPIO1->FIOSET2 |= led4_set_mask;
+    DELAY_ms(LED_DELAY_MS);
+    // Deactivate fourth LED, activate third LED
+    LPC_GPIO1->FIOCLR2 |= led4_set_mask;
+    LPC_GPIO1->FIOSET2 |= led3_set_mask;
+    DELAY_ms(LED_DELAY_MS);
+    // Deactivate third LED, activate second LED
+    LPC_GPIO1->FIOCLR2 |= led3_set_mask;
+    LPC_GPIO1->FIOSET2 |= led2_set_mask;
+    DELAY_ms(LED_DELAY_MS);
+    // Deactivate second LED, start of loop activates first LED
+    LPC_GPIO1->FIOCLR2 |= led2_set_mask;
+  }
   
-
-
-  //LPC_GPIO1->FIODIR = 0xffffffff;
-
-  LPC_GPIO1->FIOSET = 0xffffffff;
-  
-    return 0;
+  return 0;
 }
 

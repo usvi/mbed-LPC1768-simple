@@ -10,7 +10,6 @@ website: www.exploreembedded.com
 #include "delay.h"
 
 
-
 /*---------------------------------------------------------------------------------
                        void DELAY_us(unsigned int count)
  ----------------------------------------------------------------------------------
@@ -66,6 +65,7 @@ void DELAY_ms(unsigned int count)
     This function suspends the tasks for specified ticks(in sec).
 
 -----------------------------------------------------------------------------------*/
+
 
 void DELAY_sec(unsigned int count)
 {

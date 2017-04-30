@@ -1,4 +1,5 @@
 #/bin/bash
+
 MOUNT_BASE=$1
 BIN=$2
 
@@ -35,3 +36,4 @@ else
     echo "Failed to flash $BIN to $MEDIA_BASE/MBED !"
     exit 1
 fi
+

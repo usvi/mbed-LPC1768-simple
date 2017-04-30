@@ -3,7 +3,7 @@
 MOUNT_BASE=$1
 BIN=$2
 
-if [ -z $MOUNT_BASE ];
+if [ -z "$MOUNT_BASE" ];
 then
     echo "No mount point base given!"
     exit 1
@@ -17,7 +17,7 @@ fi
 
 MEDIA_BASE=`find $MOUNT_BASE | grep MBED | head -n 1 | sed s/\\\/MBED.*//;`
 
-if [ ! -d $MEDIA_BASE -o ! $MEDIA_BASE/MBED ];
+if [ ! -d "$MEDIA_BASE"  -o ! "$MEDIA_BASE/MBED" ];
 then
     echo "Failed to figure out MBED location!"
     exit 1

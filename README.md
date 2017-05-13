@@ -12,3 +12,5 @@ LPC1768 big datasheet: http://www.binaryupdates.com/wp-content/uploads/LPC1768-U
 
 LPC1768 small datasheet: http://www.nxp.com/documents/data_sheet/LPC1769_68_67_66_65_64_63.pdf
 
+MBED LPC1768 schematics: https://developer.mbed.org/media/uploads/chris/lpc1768-refdesign-schematic.pdf
+
